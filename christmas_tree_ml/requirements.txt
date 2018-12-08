@@ -1,0 +1,5 @@
+requests
+selene==1.0.0a13
+selenium==2.53.1
+six==1.11.0
+webdriver-manager==1.7
