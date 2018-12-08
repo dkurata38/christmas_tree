@@ -38,13 +38,13 @@ def extract_image_url_from_google_data_set(image_count):
     return image_urls
 
 
-urls = extract_image_url_from_google_data_set(2)
+urls = extract_image_url_from_google_data_set(100)
 
 for target in urls: # imagesからtargetに入れる
     re = requests.get(target)
     filename = 'img/' + target.split("/")[-1].replace("?", "")
 
-    with open('img/' + target.split('/')[-1], 'wb') as f: # imgフォルダに格納
+    with open(filename, 'wb') as f: # imgフォルダに格納
         f.write(re.content) # .contentにて画像データとして書き込む
  
 print("ok") # 確認
