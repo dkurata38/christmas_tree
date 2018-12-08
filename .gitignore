@@ -121,6 +121,7 @@ db.sqlite3
 
 # Flask stuff:
 instance/
+!instance/config_sample.cfg
 .webassets-cache
 
 # Scrapy stuff:
