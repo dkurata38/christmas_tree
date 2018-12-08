@@ -28,7 +28,9 @@ def extract_image_url_from_google_data_set(image_count):
     for i in range(0, image_count - 1, 1):
         image_element = image_elements.__getitem__(i)
         image_url = image_element.get_attribute("data-src")
-        image_urls.append(str(image_url))
+
+        if image_url is not None:
+            image_urls.append(str(image_url))
 
     driver.quit()
     return image_urls
