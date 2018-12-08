@@ -17,28 +17,6 @@ def allowed_file(filename):
 def index():
     return render_template('index.html')
 
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        if username == 'admin':
-            session['username'] = request.form['username']
-            return redirect(url_for('index'))
-        else:
-            return '''<p>ユーザー名が違います</p>'''
-    return '''
-        <form action="" method="post">
-            <p><input type="text" name="username">
-            <p><input type="submit" value="Login">
-        </form>
-    '''
-
-@app.route('/logout')
-def logout():
-    session.pop('username', None)
-    return redirect(url_for('index'))
-
 @app.route('/send', methods=['GET', 'POST'])
 def send():
     if request.method == 'POST':
@@ -47,7 +25,7 @@ def send():
             filename = secure_filename(img_file.filename)
             img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             img_url = '/uploads/' + filename
-            return render_template('index.html', img_url=img_url)
+            return render_template('result.html', img_url=img_url)
         else:
             return ''' <p>許可されていない拡張子です</p> '''
     else:
@@ -57,6 +35,9 @@ def send():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/result')
+def result():
+    return render_template('result.html')
 if __name__ == '__main__':
     app.debug = True
     app.run()
