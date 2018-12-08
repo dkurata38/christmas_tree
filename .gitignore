@@ -217,3 +217,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+!/christmas_tree_web/instance/config_sample.cfg
