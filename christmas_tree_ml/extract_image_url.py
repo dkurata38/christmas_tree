@@ -5,6 +5,8 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
+import requests
+
 
 def extract_image_url_from_google_data_set(image_count):
 
@@ -32,3 +34,12 @@ def extract_image_url_from_google_data_set(image_count):
 
     driver.quit()
     return image_urls
+
+image_urls = extract_image_url_from_google_data_set(2)
+
+for target in image_urls: # imagesからtargetに入れる
+    re = requests.get(target)
+    with open('img/' + target.split('/')[-1], 'wb') as f: # imgフォルダに格納
+        f.write(re.content) # .contentにて画像データとして書き込む
+ 
+print("ok") # 確認
