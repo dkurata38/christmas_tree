@@ -120,8 +120,7 @@ local_settings.py
 db.sqlite3
 
 # Flask stuff:
-instance/*
-!config_sample.cfg
+instance/
 .webassets-cache
 
 # Scrapy stuff:
@@ -218,3 +217,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+!/christmas_tree_web/instance/config_sample.cfg
