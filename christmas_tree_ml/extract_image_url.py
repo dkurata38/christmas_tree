@@ -14,7 +14,7 @@ def extract_image_url_from_google_data_set(image_count):
     options.add_argument("--headless")
     driver = SeleneDriver.wrap(Chrome(executable_path=ChromeDriverManager().install(), chrome_options=options))
 
-    url = "https://storage.googleapis.com/openimages/web/visualizer/index.html?set=train&c=%2Fm%2F025nd"
+    url = "https://www.google.com/search?biw=981&bih=563&tbm=isch&sa=1&ei=2l8MXKWVFYyH8wXBxoDwBQ&q=%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%9E%E3%82%B9%E3%83%84%E3%83%AA%E3%83%BC+%E5%AE%B6%E5%BA%AD%E7%94%A8&oq=%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%9E%E3%82%B9%E3%83%84%E3%83%AA%E3%83%BC+%E5%AE%B6%E5%BA%AD%E7%94%A8&gs_l=img.3..0l2j0i8i30l2j0i24.2293.5032..5521...3.0..0.74.628.9......1....1..gws-wiz-img.......0i4i37j0i4i37i24j0i23j0i8i30i23j0i24i23.6Nxkfgj1YN0"
     driver.get(url)
     pull_down_elements = driver.find_all("tt-selectable")
 
