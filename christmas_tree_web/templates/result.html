@@ -1,6 +1,44 @@
 {% extends "base.html" %}
 {% block content %}
-  {% if img_url %}
-<p><img src="{{ img_url }}"></p>
-  {% endif %}
+<div class="section no-pad-bot" id="index-banner">
+  <div class="container">
+    <br><br>
+    <h1 class="header center red-text text-lighten-2">Results</h1>
+    <div class="row center">
+      <h5 class="header col s12 light">あななたのクリスマスツリーのクリスマ感は{{result}}点です</h5>
+      <p>{{place}}</p>
+    </div>
+    <div class="row center">
+      <a href="/" id="download-button" class="btn-large waves-effect waves-light red lighten-2">TOPに戻る</a>
+    </div>
+    <br><br>
+
+  </div>
+</div>
+
+<div class="container">
+  <div class="row center">
+  <div id="map-canvas"></div>
+  <script src="https://maps.googleapis.com/maps/api/js?key={{google_map_api_key}}&libraries=places,geometry"></script>
+  </div>
+</div>
+<script>
+var mapDiv = document.getElementById( "map-canvas" ) ;
+
+var map = new google.maps.Map( mapDiv, {
+center: new google.maps.LatLng( 35.7100, 139.8107 ) ,
+zoom: 15 ,
+} ) ;
+var marker = new google.maps.Marker( {
+	map: map ,
+	position: new google.maps.LatLng( 35.71, 139.8107 ) ,
+} ) ;
+// InfoWindow
+var infoWindow = new google.maps.InfoWindow( {
+ position: new google.maps.LatLng( 35.71, 139.8107 ) ,
+ content: "高得点のクリスマスツリー" ,
+} ) ;
+infoWindow.open( map ) ;
+</script>
+
 {% endblock %}
