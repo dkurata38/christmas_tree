@@ -1,8 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAQQA7YoygNbc-8FLMcF3sEeei1uvkJS40"></script>
+<div class="section no-pad-bot" id="index-banner">
+  <div class="container">
+    <br><br>
+    <h1 class="header center red-text text-lighten-2 ">Image Uploads</h1>
+    <div class="row center">
+      <h5 class="header col s12 light">画像をアップロードしてクリスマスマップを完成させよう</h5>
+    </div>
+    <div class="row center">
+      <a href="/result" id="download-button" class="btn-large waves-effect waves-light red lighten-2">Get Result</a>
+    </div>
+    <br><br>
 
-
+  </div>
+</div>
 <form method="post" action="/send" enctype="multipart/form-data">
   <div class="file-field input-field">
     <div class="btn">
@@ -13,21 +24,29 @@
       <input class="file-path validate" type="text"  placeholder="Upload one or more files">
     </div>
   </div>
+  <div class="input-field col s12">
+    <p>場所を選択してください</p>
+  <select class="browser-default" id="place", name="place">
+    <option value="新宿"　disabled selected>新宿</option>
+    <option value="原宿">原宿</option>
+    <option value="六本木">六本木</option>
+  </select>
+
+</div>
   <button class="btn waves-effect waves-light" type="submit">Submit
   <i class="material-icons right">send</i>
 </button>
 </form>
-  {% if img_url %}
+{{place}}
+{% if img_url %}
 <p><img src="{{ img_url }}"></p>
-<div id="map-canvas"></div>
-
+{% endif %}
 <script>
-var mapDiv = document.getElementById( "map-canvas" ) ;
-
-var map = new google.maps.Map( mapDiv, {
-center: new google.maps.LatLng( 35.7100, 139.8107),
-zoom: 15,
-} ) ;
+  $(function() {
+    $(document).ready(function() {
+      $('select').material_select();
+    });
+  });
 </script>
-  {% endif %}
+
 {% endblock %}

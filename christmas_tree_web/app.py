@@ -1,9 +1,11 @@
 import os
+import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session
 from werkzeug import secure_filename
 from watson_developer_cloud import VisualRecognitionV3, WatsonApiException
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer,String
+
 app = Flask(__name__, instance_relative_config=True)
 
 UPLOAD_FOLDER = './uploads'
@@ -11,6 +13,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config.from_pyfile('config.cfg', silent=True)
+#GOOGLE_MAP_API_KEY = app.config['SECRET_KEY']
 GOOGLE_MAP_API_KEY = app.config['GOOGLE_MAP_API_KEY']
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///place.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -26,7 +29,6 @@ class Place(db.Model):
         self.longitude = longitude
         self.latitude = latitude
         self.score = score
-
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -57,15 +59,16 @@ def analise_image(image_file_path):
     except WatsonApiException as ex:
         print("Method failed with status code " + str(ex.code) + ": " + ex.message)
         raise ConnectionAbortedError
+
 def add_place(place,longitude,latitude,score):
     places = Place(longitude,latitude,score)
     db.session.add(places)
     db.session.commit()
 
+
 @app.route('/')
 def index():
-    places = Place.query.all()
-    return render_template('index.html',place=places)
+    return render_template('index.html')
 
 
 @app.route('/send', methods=['GET', 'POST'])
@@ -94,7 +97,9 @@ def uploaded_file(filename):
 
 @app.route('/result')
 def result():
-    return render_template('result.html',google_map_api_key=GOOGLE_MAP_API_KEY)
+    google_map_api_key = app.config["GOOGLE_MAP_API_KEY"]
+    return render_template('result.html',google_map_api_key=google_map_api_key)
+
 
 if __name__ == '__main__':
     app.debug = True
