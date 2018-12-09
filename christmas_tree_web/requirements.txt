@@ -1,3 +1,5 @@
 werkzeug
 flask
 watson-developer-cloud>="2.5.1"
+flask_sqlalchemy
+sqlalchemy
