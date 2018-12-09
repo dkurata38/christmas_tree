@@ -1,6 +1,8 @@
 import decimal
 import os
 import sqlite3
+from decimal import Decimal
+
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session
 from werkzeug import secure_filename
 from watson_developer_cloud import VisualRecognitionV3, WatsonApiException
@@ -35,9 +37,9 @@ def analise_image(image_file_path):
                 for class_value in classes:
                     if str(class_value["name"]) == "gorgeous_christmas_tree":
                         print(class_value["score"])
-                        return decimal(class_value["score"])
+                        return Decimal(class_value["score"])
 
-                return decimal(0)
+                return Decimal(0)
 
             else:
                 status_code = response.get_status_code()
