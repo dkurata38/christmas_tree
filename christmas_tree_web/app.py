@@ -60,7 +60,8 @@ def send():
             img_file.save(file_path)
             img_url = '/uploads/' + filename
             result = analise_image(str(file_path))
-            return render_template('result.html', img_url=img_url)
+            google_map_api_key = app.config["GOOGLE_MAP_API_KEY"]
+            return render_template('result.html', img_url=img_url,result=result,google_map_api_key=google_map_api_key)
         else:
             return ''' <p>許可されていない拡張子です</p> '''
     else:
