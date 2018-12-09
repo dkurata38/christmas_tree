@@ -1,3 +1,4 @@
+import decimal
 import os
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session
@@ -27,16 +28,19 @@ def analise_image(image_file_path):
 
     try:
         with open(image_file_path, mode="rb") as f:
-            classes = visual_recognition.classify(f)
-            json_dictionary = classes.get_result()
+            response = visual_recognition.classify(f, threshold='0.6', classifier_ids="christmasxtree_131894146")
+            json_dictionary = response.get_result()
             if "code" not in json_dictionary:
-                if "christmas_tree" not in json_dictionary:
-                    return 0
-                else:
-                    return int(json_dictionary["christmas_tree"])
+                classes = json_dictionary["images"]["classifiers"]["classes"]
+                for class_value in classes:
+                    if str(class_value["name"]) == "gorgeous_christmas_tree":
+                        print(class_value["score"])
+                        return decimal(class_value["score"])
+
+                return decimal(0)
 
             else:
-                status_code = classes.get_status_code()
+                status_code = response.get_status_code()
                 print(str(status_code))
                 raise ConnectionAbortedError
 
