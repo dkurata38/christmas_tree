@@ -1,3 +1,4 @@
+import re
 from time import sleep
 
 from selene.driver import SeleneDriver
@@ -41,10 +42,10 @@ def extract_image_url_from_google_data_set(image_count):
 urls = extract_image_url_from_google_data_set(100)
 
 for target in urls: # imagesからtargetに入れる
-    re = requests.get(target)
-    filename = 'img/' + target.split("/")[-1].replace("?", "")
+    response = requests.get(target)
+    filename = 'img/' + re.sub(r"(.+)(\?.+)", "\\1", target.split("/")[-1])
 
     with open(filename, 'wb') as f: # imgフォルダに格納
-        f.write(re.content) # .contentにて画像データとして書き込む
+        f.write(response.content) # .contentにて画像データとして書き込む
  
 print("ok") # 確認
