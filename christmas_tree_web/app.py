@@ -15,11 +15,11 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config.from_pyfile('config.cfg', silent=True)
-#GOOGLE_MAP_API_KEY = app.config['SECRET_KEY']
 GOOGLE_MAP_API_KEY = app.config['GOOGLE_MAP_API_KEY']
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///place.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
+
 
 class Place(db.Model):
     id = Column(Integer, primary_key=True)
@@ -31,6 +31,8 @@ class Place(db.Model):
         self.longitude = longitude
         self.latitude = latitude
         self.score = score
+
+
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
@@ -45,15 +47,21 @@ def analise_image(image_file_path):
 
     try:
         with open(image_file_path, mode="rb") as f:
-            response = visual_recognition.classfy(f, threshold="0.6", classifier_ids="christmasxtree_131894146")
+            response = visual_recognition.classify(f, threshold="0.6", classifier_ids=["christmasxtree_131894146"])
             json_dictionary = response.get_result()
             if "code" not in json_dictionary:
-                classes = json_dictionary["images"]["classifiers"]["classes"]
+                classes = json_dictionary["images"][0]["classifiers"][0]["classes"]
                 for class_value in classes:
-                    if str(class_value["name"]) == "gorgeous_christmas_tree":
+                    if str(class_value["class"]) == "gorgeous_christmas_tree":
                         print(class_value["score"])
-                        return Decimal(class_value["score"])
-                return Decimal(0)
+                        score = Decimal(class_value["score"])
+                        if score >= 0.7:
+                            return 3
+                        elif score >= 0.5:
+                            return 2
+                        elif score >= 0.2:
+                            return 1
+                return 0
 
             else:
                 status_code = response.get_status_code()
@@ -63,6 +71,7 @@ def analise_image(image_file_path):
     except WatsonApiException as ex:
         print("Method failed with status code " + str(ex.code) + ": " + ex.message)
         raise ConnectionAbortedError
+
 
 def add_place(place,longitude,latitude,score):
     places = Place(longitude,latitude,score)
