@@ -7,10 +7,11 @@ from werkzeug import secure_filename
 from watson_developer_cloud import VisualRecognitionV3, WatsonApiException
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer,String
+import os
 
 app = Flask(__name__, instance_relative_config=True)
 
-UPLOAD_FOLDER = './uploads'
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = os.urandom(24)
